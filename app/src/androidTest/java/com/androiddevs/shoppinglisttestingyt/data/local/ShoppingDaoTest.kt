@@ -15,6 +15,7 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 
+// if we don't add below anno, we'll get warning in "runBlockingTest" method.
 @ExperimentalCoroutinesApi
 // junit lib used to test java / kotlin / any code that runs on jvm. (this v can say, Local unit test)
 // Instrumented test runs on Android device, not on jvm, because they need android components.
@@ -57,7 +58,8 @@ class ShoppingDaoTest {
         dao.insertShoppingItem(shoppingItem)
 
         // observeAllShoppingItems() it is an observable query & it by default run on worker thread.
-        // but in test case we should not use concurrency,
+        // but in test case we should not use concurrency, so to solve this problem Google gives a helper class
+        // "LiveDataUtilAndroidTest" to test live data.
         val allShoppingItems = dao.observeAllShoppingItems().getOrAwaitValue()
 
         assertThat(allShoppingItems).contains(shoppingItem)
@@ -66,6 +68,7 @@ class ShoppingDaoTest {
     @Test
     fun deleteShoppingItem() = runBlockingTest {
         val shoppingItem = ShoppingItem("name", 1, 1f, "url", id = 1)
+        // inside this test case, we've new DB instance, that's y v r inserting again..
         dao.insertShoppingItem(shoppingItem)
         dao.deleteShoppingItem(shoppingItem)
 
