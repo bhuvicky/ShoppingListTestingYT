@@ -16,8 +16,17 @@ import org.junit.Test
 import org.junit.runner.RunWith
 
 @ExperimentalCoroutinesApi
+// junit lib used to test java / kotlin / any code that runs on jvm. (this v can say, Local unit test)
+// Instrumented test runs on Android device, not on jvm, because they need android components.
+// so using "RunWith" anno, we just make sure that all test inside this class will run on android device & also just to tell the junit that
+// these tests are instrumented test
 @RunWith(AndroidJUnit4::class)
+// anno tells the junit that, what v write here r "Unit Test"
 @SmallTest
+// if we write integrated test in this class, then below anno will use
+// @MediumTest
+// if we write UI test then below anno will use
+// @LargeTest
 class ShoppingDaoTest {
 
     @get:Rule
@@ -28,6 +37,8 @@ class ShoppingDaoTest {
 
     @Before
     fun setup() {
+        // instead of "databaseBuilder()" method, here we r using inMemoryDatabaseBuilder
+        // this is not a real db, it saves the data in ram instead of persistent storage, just saving data for testing purpose.
         database = Room.inMemoryDatabaseBuilder(
             ApplicationProvider.getApplicationContext(),
             ShoppingItemDatabase::class.java
@@ -45,6 +56,8 @@ class ShoppingDaoTest {
         val shoppingItem = ShoppingItem("name", 1, 1f, "url", id = 1)
         dao.insertShoppingItem(shoppingItem)
 
+        // observeAllShoppingItems() it is an observable query & it by default run on worker thread.
+        // but in test case we should not use concurrency,
         val allShoppingItems = dao.observeAllShoppingItems().getOrAwaitValue()
 
         assertThat(allShoppingItems).contains(shoppingItem)
