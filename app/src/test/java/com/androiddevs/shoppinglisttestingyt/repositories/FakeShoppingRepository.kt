@@ -6,8 +6,12 @@ import com.androiddevs.shoppinglisttestingyt.data.local.ShoppingItem
 import com.androiddevs.shoppinglisttestingyt.data.remote.responses.ImageResponse
 import com.androiddevs.shoppinglisttestingyt.other.Resource
 
+// We don’t write this “FakeShoppingRepo” class here to test our real / actual repo, instead we write it to test our view model later on..
+// Just to check if our viewmodel is properly responding to the events that come from the repository..
 class FakeShoppingRepository : ShoppingRepository {
 
+    // Test repo = FakeShoppingRepo
+    // what we r doing in our test repo is, we’ll have a simple list (act as a DB) that simulates our actual DB.
     private val shoppingItems = mutableListOf<ShoppingItem>()
 
     private val observableShoppingItems = MutableLiveData<List<ShoppingItem>>(shoppingItems)
