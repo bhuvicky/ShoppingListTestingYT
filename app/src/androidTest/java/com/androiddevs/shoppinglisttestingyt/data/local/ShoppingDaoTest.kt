@@ -30,6 +30,7 @@ import org.junit.runner.RunWith
 // @LargeTest
 class ShoppingDaoTest {
 
+    // make sure that everything will run in the same thread, 1 after another.
     @get:Rule
     var instantTaskExecutorRule = InstantTaskExecutorRule()
 
